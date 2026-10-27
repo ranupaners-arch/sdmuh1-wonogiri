@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  return (await getCollection('berita')).map(p => ({ params: { slug: p.id }, props: { p } }));
+}
+const { p } = Astro.props; const { Content } = await render(p);
+---
+<Base title={p.data.title} description={p.data.summary}><article class="mx-auto max-w-5xl px-5 py-12">
+<p class="text-sm text-muted">{p.data.category}, {p.data.date.toLocaleDateString('id-ID', { dateStyle: 'long' })}</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-primary-dark mb-8">{p.data.title}</h1>
+<div class="prose-col"><Content /></div></article></Base>

@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { site, prestasi, waLink } from '../data/site';
+const posts = (await getCollection('berita')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+---
+<Base><section class="mx-auto max-w-5xl px-5 pt-16 pb-12">
+  <p class="text-muted mb-4">Sejak {site.berdiri}, Giripurwo, Wonogiri</p>
+  <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.05] text-primary-dark max-w-3xl">{site.name}</h1>
+  <p class="mt-6 text-xl text-muted">{site.tagline}</p>
+  <p class="mt-6 prose-col">Sekolah dasar {site.status.toLowerCase()} di bawah naungan {site.naungan}, terakreditasi B, dengan {site.kurikulum}.</p>
+  <a href={waLink()} class="mt-8 inline-block rounded-full bg-primary text-white font-bold px-7 py-3">Tanya PPDB lewat WhatsApp</a>
+</section>
+<section class="mx-auto max-w-5xl px-5 py-10 grid md:grid-cols-2 gap-12 border-t border-black/10">
+  <div><h2 class="text-xl font-bold text-primary-dark mb-4">Berita terbaru</h2>
+    <ul class="space-y-4">{posts.map(p => <li><a class="font-medium hover:text-primary" href={`/berita/${p.id}`}>{p.data.title}</a><p class="text-sm text-muted">{p.data.summary}</p></li>)}</ul></div>
+  <div><h2 class="text-xl font-bold text-primary-dark mb-4">Prestasi</h2>
+    <ul class="space-y-4">{prestasi.map(p => <li class="border-l-4 border-gold pl-4"><p class="font-medium">{p.lomba} ({p.tahun})</p><p class="text-sm text-muted">{p.hasil}</p></li>)}</ul></div>
+</section></Base>

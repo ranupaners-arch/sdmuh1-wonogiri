@@ -1,0 +1,39 @@
+---
+import '../styles/global.css';
+import { site, nav, waLink } from '../data/site';
+const { title, description = `${site.name}: sekolah dasar Muhammadiyah di Wonogiri, Jawa Tengah.` } = Astro.props;
+const full = title ? `${title} | ${site.name}` : `${site.name} | SD Muhammadiyah Wonogiri`;
+const ld = { '@context': 'https://schema.org', '@type': 'EducationalOrganization', name: site.name, address: site.alamat,
+  geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng }, telephone: site.telepon, email: site.email, foundingDate: String(site.berdiri) };
+---
+<!doctype html>
+<html lang="id"><head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{full}</title><meta name="description" content={description} />
+<meta property="og:title" content={full} /><meta property="og:description" content={description} /><meta property="og:type" content="website" />
+<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</head>
+<body class="min-h-screen flex flex-col pb-20 md:pb-0">
+<a href="#isi" class="sr-only focus:not-sr-only focus:p-3">Langsung ke isi</a>
+<header class="border-b border-black/10">
+  <div class="mx-auto max-w-5xl px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+    <a href="/" class="font-bold text-primary-dark">{site.name}</a>
+    <nav aria-label="Utama"><ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
+      {nav.map(([l,h]) => <li><a class="hover:text-primary" href={h}>{l}</a></li>)}
+      <li><a class="font-bold text-primary" href="/ppdb">Daftar PPDB</a></li>
+    </ul></nav>
+  </div>
+</header>
+<main id="isi" class="flex-1"><slot /></main>
+<footer class="border-t border-black/10 mt-16">
+  <div class="mx-auto max-w-5xl px-5 py-8 text-sm text-muted grid gap-1">
+    <p class="text-ink font-medium">{site.name}</p><p>{site.alamat}</p>
+    <p>NPSN {site.npsn}, {site.status}, naungan {site.naungan}</p>
+    <p><a class="underline" href={site.facebook}>Facebook</a> | <a class="underline" href={`mailto:${site.email}`}>{site.email}</a></p>
+  </div>
+</footer>
+<a href={waLink()} class="md:hidden fixed bottom-4 inset-x-4 text-center rounded-full bg-primary text-white font-bold py-3 shadow-lg">Tanya PPDB lewat WhatsApp</a>
+</body></html>

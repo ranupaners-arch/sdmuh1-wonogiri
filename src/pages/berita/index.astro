@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('berita')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="Berita"><div class="mx-auto max-w-5xl px-5 py-12">
+<h1 class="text-3xl md:text-4xl font-extrabold text-primary-dark mb-8">Berita</h1>
+<ul class="space-y-8 prose-col">{posts.map(p => <li>
+  <p class="text-sm text-muted">{p.data.category}, {p.data.date.toLocaleDateString('id-ID', { dateStyle: 'long' })}</p>
+  <a class="text-xl font-bold hover:text-primary" href={`/berita/${p.id}`}>{p.data.title}</a>
+  <p class="text-muted">{p.data.summary}</p></li>)}</ul></div></Base>
